@@ -12,19 +12,16 @@ class LoginController extends ChangeNotifier {
   bool isLoading = false;
   late SharedPreferences _sharedPreferences;
 
-  /// Sets loading state and notifies listeners
   void setLoading(bool value) {
     isLoading = value;
     notifyListeners();
   }
 
-  /// Handles the login process
-  /// 
-  /// Takes [email] and [password] from form and attempts to authenticate
+ 
   Future<void> onLogin(String email, String password, BuildContext context) async {
     log("loginController -> onLogin() started");
 
-    // Validate input fields
+
     if (email.isEmpty || password.isEmpty) {
       AppUtils.showToast(
         "Username and Password are required",
@@ -33,46 +30,43 @@ class LoginController extends ChangeNotifier {
       return;
     }
 
-    // Start loading state
+   
     setLoading(true);
 
     try {
-      // Attempt login
+     
       final response = await LoginService.postLoginData(email, password);
       log("postLoginData() response: $response");
 
-      // Handle response
+      
       if (response != null && response["token"] != null) {
-        // Store user data and navigate to home screen
         await _storeLoginData(response);
         await _storeUserToken(response["token"]);
 
         AppUtils.showToast("Logged In Successfully", context: context);
         
-        // Navigate to home screen and clear previous routes
         _navigateToHome(context);
       } else {
-        // Handle error response
+      
         String errorMessage = response["error"] ?? "Login failed. Please try again.";
         AppUtils.showToast(errorMessage, context: context);
       }
     } catch (e) {
-      // Handle exceptions
+      
       AppUtils.showToast("An error occurred. Please try again.", context: context);
       log("Login error: $e");
     } finally {
-      // Reset loading state
+      
       setLoading(false);
     }
   }
 
-  /// Toggles password visibility
+ 
   void togglePasswordVisibility() {
     visibility = !visibility;
     notifyListeners();
   }
 
-  /// Stores login data in shared preferences
   Future<void> _storeLoginData(Map<String, dynamic> loginData) async {
     log("storeLoginData()");
     _sharedPreferences = await SharedPreferences.getInstance();
@@ -81,14 +75,14 @@ class LoginController extends ChangeNotifier {
     await _sharedPreferences.setBool(AppConfig.loggedIn, true);
   }
 
-  /// Stores user token in shared preferences
+
   Future<void> _storeUserToken(String token) async {
     log("storeUserToken");
     _sharedPreferences = await SharedPreferences.getInstance();
     await _sharedPreferences.setString(AppConfig.token, token);
   }
   
-  /// Navigates to the home screen and clears previous routes
+  
   void _navigateToHome(BuildContext context) {
     Navigator.pushAndRemoveUntil(
       context,
