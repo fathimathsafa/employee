@@ -1,0 +1,2 @@
+C:/Users/SAFA/StudioProjects/employee/android/app/.cxx/RelWithDebInfo/2w6q4h6z/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/SAFA/StudioProjects/employee/android/app/.cxx/RelWithDebInfo/2w6q4h6z/arm64-v8a/CMakeFiles/rebuild_cache.dir
